@@ -2,12 +2,15 @@ package com.example.screenmatch.principal;
 
 import com.example.screenmatch.model.DadosSerie;
 import com.example.screenmatch.model.DadosTemporada;
+import com.example.screenmatch.model.Serie;
 import com.example.screenmatch.service.ConsumirApi;
 import com.example.screenmatch.service.ConverterDados;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Principal {
 
@@ -80,6 +83,8 @@ public class Principal {
   }
 
   private void listarSeriesBuscadas() {
-    dadosSeries.forEach(System.out::println);
+    List<Serie> series = dadosSeries.stream().map(Serie::new).toList();
+
+    series.stream().sorted(Comparator.comparing(Serie::getGenero)).forEach(System.out::println);
   }
 }
