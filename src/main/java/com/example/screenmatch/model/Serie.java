@@ -1,6 +1,7 @@
 package com.example.screenmatch.model;
 
 import com.example.screenmatch.service.ConsultaChatGPT;
+import com.example.screenmatch.service.ConsultaLibreTranslate;
 
 import java.util.OptionalDouble;
 
@@ -20,7 +21,7 @@ public class Serie {
     this.genero = Categoria.fromString(dadosSerie.genero().split(",")[0].trim());
     this.atores = dadosSerie.atores();
     this.poster = dadosSerie.poster();
-    this.sinopse = ConsultaChatGPT.obterTraducao(dadosSerie.sinopse()).trim();
+    this.sinopse = ConsultaLibreTranslate.obterTraducao(dadosSerie.sinopse()).trim();
   }
 
   public String getTitulo() {
