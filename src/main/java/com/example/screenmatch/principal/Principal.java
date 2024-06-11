@@ -19,7 +19,6 @@ public class Principal {
   private final ConverterDados converterDados = new ConverterDados();
   private final String ENDERECO = "https://www.omdbapi.com/?t=";
   private final String API_KEY = "&apikey=6585022c";
-  private final List<DadosSerie> dadosSeries = new ArrayList<>();
   private final SerieRepository serieRepository;
 
   public Principal(SerieRepository serieRepository) {
@@ -73,8 +72,8 @@ public class Principal {
     System.out.println("Digite o nome da série para busca");
     var nomeSerie = scanner.nextLine();
     var json = consumirApi.obterDados(ENDERECO + nomeSerie.replace(" ", "+") + API_KEY);
-    DadosSerie dadosSerie = converterDados.obterDados(json, DadosSerie.class);
-    return dadosSerie;
+
+    return converterDados.obterDados(json, DadosSerie.class);
   }
 
   private void buscarEpisodioPorSerie(){
@@ -82,7 +81,9 @@ public class Principal {
     List<DadosTemporada> temporadas = new ArrayList<>();
 
     for (int i = 1; i <= dadosSerie.totalTemporadas(); i++) {
-      var json = consumirApi.obterDados(ENDERECO + dadosSerie.titulo().replace(" ", "+") + "&season=" + i + API_KEY);
+      var json = consumirApi.obterDados(ENDERECO + dadosSerie.titulo().replace(
+          " ", "+") + "&season=" + i + API_KEY);
+
       DadosTemporada dadosTemporada = converterDados.obterDados(json, DadosTemporada.class);
       temporadas.add(dadosTemporada);
     }
@@ -90,7 +91,7 @@ public class Principal {
   }
 
   private void listarSeriesBuscadas() {
-    List<Serie> series = dadosSeries.stream().map(Serie::new).toList();
+    List<Serie> series = serieRepository.findAll();
 
     series.stream().sorted(Comparator.comparing(Serie::getGenero)).forEach(System.out::println);
   }
