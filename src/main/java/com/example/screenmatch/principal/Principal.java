@@ -3,6 +3,7 @@ package com.example.screenmatch.principal;
 import com.example.screenmatch.model.DadosSerie;
 import com.example.screenmatch.model.DadosTemporada;
 import com.example.screenmatch.model.Serie;
+import com.example.screenmatch.repository.SerieRepository;
 import com.example.screenmatch.service.ConsumirApi;
 import com.example.screenmatch.service.ConverterDados;
 
@@ -10,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Principal {
 
@@ -20,6 +20,11 @@ public class Principal {
   private final String ENDERECO = "https://www.omdbapi.com/?t=";
   private final String API_KEY = "&apikey=6585022c";
   private final List<DadosSerie> dadosSeries = new ArrayList<>();
+  private final SerieRepository serieRepository;
+
+  public Principal(SerieRepository serieRepository) {
+    this.serieRepository = serieRepository;
+  }
 
   public void exibirMenu() {
 
@@ -58,7 +63,9 @@ public class Principal {
 
   private void buscarSerieWeb() {
     DadosSerie dados = getDadosSerie();
-    dadosSeries.add(dados);
+    Serie serie = new Serie(dados);
+
+    serieRepository.save(serie);
     System.out.println(dados);
   }
 
