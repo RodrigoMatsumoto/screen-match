@@ -1,6 +1,5 @@
 package com.example.screenmatch.model;
 
-import com.example.screenmatch.service.ConsultaLibreTranslate;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -31,11 +30,10 @@ public class Serie {
 
   private String sinopse;
 
-  @Transient
+  @OneToMany(mappedBy = "serie")
   private List<Episodio> episodios = new ArrayList<>();
 
-  public Serie() {
-  }
+  public Serie() { }
 
   public Serie(DadosSerie dadosSerie) {
     this.titulo = dadosSerie.titulo();
