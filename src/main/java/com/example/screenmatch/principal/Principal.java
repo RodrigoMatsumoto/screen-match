@@ -1,9 +1,6 @@
 package com.example.screenmatch.principal;
 
-import com.example.screenmatch.model.DadosSerie;
-import com.example.screenmatch.model.DadosTemporada;
-import com.example.screenmatch.model.Episodio;
-import com.example.screenmatch.model.Serie;
+import com.example.screenmatch.model.*;
 import com.example.screenmatch.repository.SerieRepository;
 import com.example.screenmatch.service.ConsumirApi;
 import com.example.screenmatch.service.ConverterDados;
@@ -37,6 +34,7 @@ public class Principal {
                 4 - Buscar série por título
                 5 - Buscar séries por ator
                 6 - Top 5 séries
+                7 - Buscar séries por categoria
                 
                 0 - Sair
                 """;
@@ -64,6 +62,9 @@ public class Principal {
         case 6:
           buscarTop5Series();
           break;
+        case 7:
+          buscarSeriesPorCategoria();
+          break;
         case 0:
           System.out.println("Saindo...");
           break;
@@ -72,7 +73,6 @@ public class Principal {
       }
     }
   }
-
 
   private DadosSerie getDadosSerie() {
     System.out.println("Digite o nome da série para busca");
@@ -149,12 +149,25 @@ public class Principal {
 
     List<Serie> seriesEncontradas =
         serieRepository.findByAtoresContainingIgnoreCaseAndAvaliacaoGreaterThanEqual(nomeAtor, avaliacao);
+
     System.out.println("Séries em que " + nomeAtor + " trabalhou: ");
     seriesEncontradas.forEach(s -> System.out.println(s.getTitulo() + " avaliação: " + s.getAvaliacao()));
   }
 
   private void buscarTop5Series() {
     List<Serie> seriesTop = serieRepository.findTop5ByOrderByAvaliacaoDesc();
+
     seriesTop.forEach(s -> System.out.println(s.getTitulo() + " avaliação: " + s.getAvaliacao()));
+  }
+
+  private void buscarSeriesPorCategoria() {
+    System.out.println("Deseja buscar série de que categoria/gênero? ");
+    var nomeGenero = scanner.nextLine();
+
+    Categoria categoria = Categoria.fromPortugues(nomeGenero);
+    List<Serie> seriesPorCategoria = serieRepository.findByGenero(categoria);
+
+    System.out.println("Séries do categoria " + nomeGenero);
+    seriesPorCategoria.forEach(System.out::println);
   }
 }
