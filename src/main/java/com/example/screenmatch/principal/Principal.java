@@ -36,6 +36,7 @@ public class Principal {
                 3 - Listar séries buscadas
                 4 - Buscar série por título
                 5 - Buscar séries por ator
+                6 - Top 5 séries
                 
                 0 - Sair
                 """;
@@ -59,6 +60,9 @@ public class Principal {
           break;
         case 5:
           buscarSeriesPorAtor();
+          break;
+        case 6:
+          buscarTop5Series();
           break;
         case 0:
           System.out.println("Saindo...");
@@ -107,7 +111,7 @@ public class Principal {
       temporadas.forEach(System.out::println);
 
       List<Episodio> episodios = temporadas.stream().flatMap(d -> d.episodios().stream()
-          .map(e -> new Episodio(d.numero(), e) {}))
+              .map(e -> new Episodio(d.numero(), e) {}))
           .collect(Collectors.toList());
 
       serieEncontrada.setEpisodios(episodios);
@@ -147,5 +151,10 @@ public class Principal {
         serieRepository.findByAtoresContainingIgnoreCaseAndAvaliacaoGreaterThanEqual(nomeAtor, avaliacao);
     System.out.println("Séries em que " + nomeAtor + " trabalhou: ");
     seriesEncontradas.forEach(s -> System.out.println(s.getTitulo() + " avaliação: " + s.getAvaliacao()));
+  }
+
+  private void buscarTop5Series() {
+    List<Serie> seriesTop = serieRepository.findTop5ByOrderByAvaliacaoDesc();
+    seriesTop.forEach(s -> System.out.println(s.getTitulo() + " avaliação: " + s.getAvaliacao()));
   }
 }
