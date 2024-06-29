@@ -60,6 +60,11 @@ public class SerieService {
     return null;
   }
 
+  public List<EpisodioDTO> obterTemporadasPorNumero(Long id, Long numero) {
+    return converterDadosEpisodio(serieRepository.obterEpisodioPorTemporada(id, numero));
+  }
+
+
 
   private List<SerieDTO> converterDadosSerie(List<Serie> series) {
     return series.stream()
