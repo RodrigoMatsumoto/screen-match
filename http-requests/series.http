@@ -1,5 +1,11 @@
-### buscar todas as series
+### buscar todas as séries
 GET http://localhost:8080/series
 
-### buscar top 5 series
+### buscar top 5 séries por avaliação
 GET http://localhost:8080/series/top5
+
+### buscar últimos lançamentos de episódios de séries
+GET http://localhost:8080/series/lancamentos
+
+### buscar série por id
+GET http://localhost:8080/series/2
