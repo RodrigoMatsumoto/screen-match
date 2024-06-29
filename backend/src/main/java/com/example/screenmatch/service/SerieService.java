@@ -2,6 +2,7 @@ package com.example.screenmatch.service;
 
 import com.example.screenmatch.dto.EpisodioDTO;
 import com.example.screenmatch.dto.SerieDTO;
+import com.example.screenmatch.model.Categoria;
 import com.example.screenmatch.model.Episodio;
 import com.example.screenmatch.model.Serie;
 import com.example.screenmatch.repository.SerieRepository;
@@ -64,7 +65,11 @@ public class SerieService {
     return converterDadosEpisodio(serieRepository.obterEpisodioPorTemporada(id, numero));
   }
 
+  public List<SerieDTO> obterSeriesPorCategoria(String nomeGenero) {
+    Categoria categoria = Categoria.fromPortugues(nomeGenero);
 
+    return converterDadosSerie(serieRepository.findByGenero(categoria));
+  }
 
   private List<SerieDTO> converterDadosSerie(List<Serie> series) {
     return series.stream()
