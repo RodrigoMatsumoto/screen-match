@@ -1,0 +1,5 @@
+### buscar todas as series
+GET http://localhost:8080/series
+
+### buscar top 5 series
+GET http://localhost:8080/series/top5
