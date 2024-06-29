@@ -28,7 +28,12 @@ function carregarTemporadas() {
             const optionTodos = document.createElement('option');
             optionTodos.value = 'todas';
             optionTodos.textContent = 'Todas as temporadas'
-            listaTemporadas.appendChild(optionTodos); 
+            listaTemporadas.appendChild(optionTodos);
+
+            const optionTop5 = document.createElement('option');
+            optionTop5.value = 'top5';
+            optionTop5.textContent = 'Top 5 episódios'
+            listaTemporadas.appendChild(optionTop5);
         })
         .catch(error => {
             console.error('Erro ao obter temporadas:', error);
@@ -37,23 +42,28 @@ function carregarTemporadas() {
 
 // Função para carregar episódios de uma temporada
 function carregarEpisodios() {
-    getDados(`/series/${serieId}/temporadas/${listaTemporadas.value}`)
+    let url = `/series/${serieId}/temporadas/${listaTemporadas.value}`;
+
+    if (listaTemporadas.value === 'top5') {
+        url = `/series/${serieId}/temporadas/top`;
+    }
+
+    getDados(url)
         .then(data => {
             const temporadasUnicas = [...new Set(data.map(temporada => temporada.temporada))];
-            fichaSerie.innerHTML = ''; 
+            fichaSerie.innerHTML = '';
             temporadasUnicas.forEach(temporada => {
                 const ul = document.createElement('ul');
                 ul.className = 'episodios-lista';
 
                 const episodiosTemporadaAtual = data.filter(serie => serie.temporada === temporada);
 
-                const listaHTML = episodiosTemporadaAtual.map(serie => `
+                ul.innerHTML = episodiosTemporadaAtual.map(serie => `
                     <li>
                         ${serie.numeroEpisodio} - ${serie.titulo}
                     </li>
                 `).join('');
-                ul.innerHTML = listaHTML;
-                
+
                 const paragrafo = document.createElement('p');
                 const linha = document.createElement('br');
                 paragrafo.textContent = `Temporada ${temporada}`;
