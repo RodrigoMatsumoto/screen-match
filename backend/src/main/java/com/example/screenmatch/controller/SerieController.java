@@ -1,5 +1,6 @@
 package com.example.screenmatch.controller;
 
+import com.example.screenmatch.dto.EpisodioDTO;
 import com.example.screenmatch.dto.SerieDTO;
 import com.example.screenmatch.service.SerieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,4 +37,10 @@ public class SerieController {
   public SerieDTO obterPorId(@PathVariable Long id) {
     return serieService.obterPorId(id);
   }
+
+  @GetMapping("/{id}/temporadas/todas")
+  public List<EpisodioDTO> obterTodasTemporadas(@PathVariable Long id) {
+    return serieService.obterTodasTemporadas(id);
+  }
+
 }

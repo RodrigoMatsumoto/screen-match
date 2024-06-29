@@ -1,6 +1,8 @@
 package com.example.screenmatch.service;
 
+import com.example.screenmatch.dto.EpisodioDTO;
 import com.example.screenmatch.dto.SerieDTO;
+import com.example.screenmatch.model.Episodio;
 import com.example.screenmatch.model.Serie;
 import com.example.screenmatch.repository.SerieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +19,15 @@ public class SerieService {
   private SerieRepository serieRepository;
 
   public List<SerieDTO> obterTodasAsSeries() {
-    return converterDados(serieRepository.findAll());
+    return converterDadosSerie(serieRepository.findAll());
   }
 
   public List<SerieDTO> obterTop5Series() {
-    return converterDados(serieRepository.findTop5ByOrderByAvaliacaoDesc());
+    return converterDadosSerie(serieRepository.findTop5ByOrderByAvaliacaoDesc());
   }
 
   public List<SerieDTO> obterLancamentos() {
-    return converterDados(serieRepository.encontrarEpisodiosMaisRecentes());
+    return converterDadosSerie(serieRepository.encontrarEpisodiosMaisRecentes());
   }
 
   public SerieDTO obterPorId(Long id) {
@@ -47,7 +49,19 @@ public class SerieService {
     return null;
   }
 
-  private List<SerieDTO> converterDados(List<Serie> series) {
+  public List<EpisodioDTO> obterTodasTemporadas(Long id) {
+    Optional<Serie> serie = serieRepository.findById(id);
+
+    if (serie.isPresent()) {
+      Serie s = serie.get();
+      return converterDadosEpisodio(s.getEpisodios());
+    }
+
+    return null;
+  }
+
+
+  private List<SerieDTO> converterDadosSerie(List<Serie> series) {
     return series.stream()
         .map(serie -> new SerieDTO(
              serie.getId(),
@@ -60,5 +74,14 @@ public class SerieService {
              serie.getSinopse()
             )
         ).collect(Collectors.toList());
+  }
+
+  private List<EpisodioDTO> converterDadosEpisodio(List<Episodio> episodios) {
+    return episodios.stream()
+        .map(episodio -> new EpisodioDTO(
+             episodio.getTemporada(),
+             episodio.getNumeroEpisodio(),
+             episodio.getTitulo()
+        )).collect(Collectors.toList());
   }
 }
